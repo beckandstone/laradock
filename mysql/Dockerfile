@@ -14,6 +14,12 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN chown -R mysql:root /var/lib/mysql/
 
 ADD my.cnf /etc/mysql/conf.d/my.cnf
+ADD MyShed.sql /docker-entrypoint-initdb.d/
+
+RUN /bin/bash -c "/usr/bin/mysqld_safe &" && \
+  sleep 5 && \
+  mysql -uroot -proot "MyShedDB" && \
+  mysql -uroot -proot MyShedDB < /docker-entrypoint-initdb.d/MyShed.sql
 
 CMD ["mysqld"]
 
