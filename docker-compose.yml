@@ -166,11 +166,11 @@ services:
 
 ### Networks Setup ############################################
 
-  networks:
-    frontend:
-    backend:
+networks:
+  frontend:
+  backend:
 
 ### Volumes Setup #############################################
 
-  volumes:
-    data:
+volumes:
+  data:
