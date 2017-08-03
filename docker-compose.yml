@@ -15,38 +15,38 @@ services:
       build:
         context: ./workspace
         args:
-          - INSTALL_XDEBUG=${WORKSPACE_INSTALL_XDEBUG}
-          - INSTALL_BLACKFIRE=${INSTALL_BLACKFIRE}
-          - INSTALL_SOAP=${WORKSPACE_INSTALL_SOAP}
-          - INSTALL_MONGO=${WORKSPACE_INSTALL_MONGO}
-          - INSTALL_MSSQL=${WORKSPACE_INSTALL_MSSQL}
-          - INSTALL_NODE=${WORKSPACE_INSTALL_NODE}
-          - INSTALL_YARN=${WORKSPACE_INSTALL_YARN}
-          - INSTALL_DRUSH=${WORKSPACE_INSTALL_DRUSH}
-          - INSTALL_AEROSPIKE=${WORKSPACE_INSTALL_AEROSPIKE}
-          - INSTALL_V8JS=${WORKSPACE_INSTALL_V8JS}
-          - COMPOSER_GLOBAL_INSTALL=${WORKSPACE_COMPOSER_GLOBAL_INSTALL}
-          - INSTALL_WORKSPACE_SSH=${WORKSPACE_INSTALL_WORKSPACE_SSH}
-          - INSTALL_LARAVEL_ENVOY=${WORKSPACE_INSTALL_LARAVEL_ENVOY}
-          - INSTALL_LARAVEL_INSTALLER=${WORKSPACE_INSTALL_LARAVEL_INSTALLER}
-          - INSTALL_DEPLOYER=${WORKSPACE_INSTALL_DEPLOYER}
-          - INSTALL_LINUXBREW=${WORKSPACE_INSTALL_LINUXBREW}
-          - INSTALL_MC=${WORKSPACE_INSTALL_MC}
-          - INSTALL_IMAGE_OPTIMIZERS=${WORKSPACE_INSTALL_IMAGE_OPTIMIZERS}
-          - PUID=${WORKSPACE_PUID}
-          - PGID=${WORKSPACE_PGID}
-          - NODE_VERSION=${WORKSPACE_NODE_VERSION}
-          - YARN_VERSION=${WORKSPACE_YARN_VERSION}
-          - TZ=${WORKSPACE_TIMEZONE}
-          - BLACKFIRE_CLIENT_ID=${BLACKFIRE_CLIENT_ID}
-          - BLACKFIRE_CLIENT_TOKEN=${BLACKFIRE_CLIENT_TOKEN}
-        dockerfile: "Dockerfile-${PHP_VERSION}"
+          - INSTALL_XDEBUG=true
+          - INSTALL_BLACKFIRE=false
+          - INSTALL_SOAP=false
+          - INSTALL_MONGO=false
+          - INSTALL_MSSQL=false
+          - INSTALL_NODE=false
+          - INSTALL_YARN=false
+          - INSTALL_DRUSH=false
+          - INSTALL_AEROSPIKE=false
+          - INSTALL_V8JS=false
+          - COMPOSER_GLOBAL_INSTALL=false
+          - INSTALL_WORKSPACE_SSH=false
+          - INSTALL_LARAVEL_ENVOY=false
+          - INSTALL_LARAVEL_INSTALLER=false
+          - INSTALL_DEPLOYER=false
+          - INSTALL_LINUXBREW=false
+          - INSTALL_MC=false
+          - INSTALL_IMAGE_OPTIMIZERS=false
+          - PUID=1000
+          - PGID=1000
+          - NODE_VERSION=stable
+          - YARN_VERSION=latest
+          - TZ=UTC
+          - BLACKFIRE_CLIENT_ID=<client_id>
+          - BLACKFIRE_CLIENT_TOKEN=<client_token>
+        dockerfile: "Dockerfile-71"
       volumes:
         - data:/var/www
       extra_hosts:
-        - "dockerhost:${DOCKER_HOST_IP}"
+        - "dockerhost:104.236.48.91"
       ports:
-        - "${WORKSPACE_SSH_PORT}:22"
+        - "2222:22"
       tty: true
       networks:
         - frontend
@@ -58,38 +58,38 @@ services:
       build:
         context: ./php-fpm
         args:
-          - INSTALL_XDEBUG=${PHP_FPM_INSTALL_XDEBUG}
-          - INSTALL_BLACKFIRE=${INSTALL_BLACKFIRE}
-          - INSTALL_SOAP=${PHP_FPM_INSTALL_SOAP}
-          - INSTALL_MONGO=${PHP_FPM_INSTALL_MONGO}
-          - INSTALL_MSSQL=${PHP_FPM_INSTALL_MSSQL}
-          - INSTALL_ZIP_ARCHIVE=${PHP_FPM_INSTALL_ZIP_ARCHIVE}
-          - INSTALL_BCMATH=${PHP_FPM_INSTALL_BCMATH}
-          - INSTALL_PHPREDIS=${PHP_FPM_INSTALL_PHPREDIS}
-          - INSTALL_MEMCACHED=${PHP_FPM_INSTALL_MEMCACHED}
-          - INSTALL_OPCACHE=${PHP_FPM_INSTALL_OPCACHE}
-          - INSTALL_EXIF=${PHP_FPM_INSTALL_EXIF}
-          - INSTALL_AEROSPIKE=${PHP_FPM_INSTALL_AEROSPIKE}
-          - INSTALL_MYSQLI=${PHP_FPM_INSTALL_MYSQLI}
-          - INSTALL_TOKENIZER=${PHP_FPM_INSTALL_TOKENIZER}
-          - INSTALL_INTL=${PHP_FPM_INSTALL_INTL}
-          - INSTALL_GHOSTSCRIPT=${PHP_FPM_INSTALL_GHOSTSCRIPT}
-          - INSTALL_LDAP=${PHP_FPM_INSTALL_LDAP}
-          - INSTALL_SWOOLE=${PHP_FPM_INSTALL_SWOOLE}
-          - INSTALL_IMAGE_OPTIMIZERS=${PHP_FPM_INSTALL_IMAGE_OPTIMIZERS}
-        dockerfile: "Dockerfile-${PHP_VERSION}"
+          - INSTALL_XDEBUG=false
+          - INSTALL_BLACKFIRE=false
+          - INSTALL_SOAP=false
+          - INSTALL_MONGO=false
+          - INSTALL_MSSQL=false
+          - INSTALL_ZIP_ARCHIVE=false
+          - INSTALL_BCMATH=false
+          - INSTALL_PHPREDIS=false
+          - INSTALL_MEMCACHED=false
+          - INSTALL_OPCACHE=false
+          - INSTALL_EXIF=false
+          - INSTALL_AEROSPIKE=false
+          - INSTALL_MYSQLI=false
+          - INSTALL_TOKENIZER=false
+          - INSTALL_INTL=false
+          - INSTALL_GHOSTSCRIPT=false
+          - INSTALL_LDAP=false
+          - INSTALL_SWOOLE=false
+          - INSTALL_IMAGE_OPTIMIZERS=false
+        dockerfile: "Dockerfile-71"
       volumes:
         - data:/var/www
       volumes:
-        - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini
+        - ./php-fpm/php71.ini:/usr/local/etc/php/php.ini
       expose:
         - "9000"
       depends_on:
         - workspace
       extra_hosts:
-        - "dockerhost:${DOCKER_HOST_IP}"
+        - "dockerhost:104.236.48.91"
       environment:
-        - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
+        - PHP_IDE_CONFIG=laradock
       networks:
         - backend
 
@@ -99,15 +99,15 @@ services:
       build:
         context: ./apache2
         args:
-          - PHP_SOCKET=${PHP_SOCKET}
+          - PHP_SOCKET=php-fpm:9000
       volumes:
         - data:/var/www
       volumes:
-        - ${APACHE_HOST_LOG_PATH}:/var/log/apache2
-        - ${APACHE_SITES_PATH}:/etc/apache2/sites-available
+        - ./logs/apache2:/var/log/apache2
+        - ./apache2/sites:/etc/apache2/sites-available
       ports:
-        - "${APACHE_HOST_HTTP_PORT}:80"
-        - "${APACHE_HOST_HTTPS_PORT}:443"
+        - "801:80"
+        - "443:443"
       depends_on:
         - php-fpm
       networks:
@@ -120,18 +120,18 @@ services:
       build:
         context: ./mysql
         args:
-          - MYSQL_VERSION=${MYSQL_VERSION}
+          - MYSQL_VERSION=8.0
       environment:
-        - MYSQL_DATABASE=${MYSQL_DATABASE}
-        - MYSQL_USER=${MYSQL_USER}
-        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-        - TZ=${WORKSPACE_TIMEZONE}
+        - MYSQL_DATABASE=MyShedDB
+        - MYSQL_USER=MyShed
+        - MYSQL_PASSWORD=!2e2v~ZVKz7m5[qu
+        - MYSQL_ROOT_PASSWORD=root
+        - TZ=UTC
       volumes:
-        - ${DATA_SAVE_PATH}/mysql:/var/lib/mysql
-        - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
+        - ~/.laradock/data/mysql:/var/lib/mysql
+        - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       ports:
-        - "${MYSQL_PORT}:3306"
+        - "33061:3306"
       networks:
         - backend
 
@@ -140,7 +140,7 @@ services:
     balancer:
       build: ./haproxy
       ports:
-        - "${HAPROXY_HOST_HTTP_PORT}:8085"
+        - "8085:8085"
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
       links:
@@ -154,11 +154,11 @@ services:
       environment:
         JAVA_OPTS: "-Djava.awt.headless=true"
       ports:
-        - "${JENKINS_HOST_SLAVE_AGENT_PORT}:50000"
-        - "${JENKINS_HOST_HTTP_PORT}:8080"
+        - "50000:50000"
+        - "8090:8080"
       privileged: true
       volumes:
-        - ${JENKINS_HOME}:/var/jenkins_home
+        - ./jenkins/jenkins_home:/var/jenkins_home
         - /var/run/docker.sock:/var/run/docker.sock
       networks:
         - frontend
