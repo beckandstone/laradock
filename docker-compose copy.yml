@@ -1,7 +1,7 @@
 version: '2'
 services:
 ### Applications Code Container #############################
-    applications-cherokeerental:
+    applications-renta-barn-2:
       image: tianon/true
       volumes:
         - ${APPLICATION}:/var/www
