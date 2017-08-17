@@ -142,7 +142,7 @@ services:
 
 ### Apache Server Container #################################
 
-    apache2:
+    apache2-hometowne-capital:
       build:
         context: ./apache2
         args:
