@@ -4,14 +4,14 @@ services:
 
 ### Applications Code Container #############################
 
-    applications:
+    applications-cherokeerental:
       image: tianon/true
       volumes:
         - ${APPLICATION}:/var/www
 
 ### Workspace Utilities Container ###########################
 
-    workspace:
+    workspace-cherokeerental:
       build:
         context: ./workspace
         args:
@@ -42,7 +42,7 @@ services:
           - BLACKFIRE_CLIENT_TOKEN=${BLACKFIRE_CLIENT_TOKEN}
         dockerfile: "Dockerfile-${PHP_VERSION}"
       volumes_from:
-        - applications
+        - applications-cherokeerental
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
       ports:
@@ -54,7 +54,7 @@ services:
 
 ### PHP-FPM Container #######################################
 
-    php-fpm:
+    php-fpm-cherokeerental:
       build:
         context: ./php-fpm
         args:
@@ -101,7 +101,7 @@ services:
       volumes_from:
         - applications
       depends_on:
-        - workspace
+        - workspace-cherokeerental
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
       networks:
@@ -142,7 +142,7 @@ services:
 
 ### Apache Server Container #################################
 
-    apache2-cherokee-rental:
+    apache2-cherokeerental:
       build:
         context: ./apache2
         args:
@@ -156,7 +156,7 @@ services:
         - "${APACHE_HOST_HTTP_PORT}:80"
         - "${APACHE_HOST_HTTPS_PORT}:443"
       depends_on:
-        - php-fpm
+        - php-fpm-cherokeerental
       networks:
         - frontend
         - backend
