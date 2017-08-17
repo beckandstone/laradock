@@ -79,7 +79,7 @@ services:
           - INSTALL_IMAGE_OPTIMIZERS=${PHP_FPM_INSTALL_IMAGE_OPTIMIZERS}
         dockerfile: "Dockerfile-${PHP_VERSION}"
       volumes_from:
-        - applications
+        - applications-cherokeerental
       volumes:
         - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini
       expose:
@@ -99,7 +99,7 @@ services:
       build:
         context: ./php-worker
       volumes_from:
-        - applications
+        - applications-cherokeerental
       depends_on:
         - workspace-cherokeerental
       extra_hosts:
@@ -115,7 +115,7 @@ services:
         args:
           - PHP_UPSTREAM=php-fpm
       volumes_from:
-        - applications
+        - applications-cherokeerental
       volumes:
         - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
         - ${NGINX_SITES_PATH}:/etc/nginx/sites-available
@@ -148,7 +148,7 @@ services:
         args:
           - PHP_SOCKET=${PHP_SOCKET}
       volumes_from:
-        - applications
+        - applications-cherokeerental
       volumes:
         - ${APACHE_HOST_LOG_PATH}:/var/log/apache2
         - ${APACHE_SITES_PATH}:/etc/apache2/sites-available
@@ -166,7 +166,7 @@ services:
     hhvm:
       build: ./hhvm
       volumes_from:
-        - applications
+        - applications-cherokeerental
       expose:
         - "9000"
       depends_on:
@@ -343,7 +343,7 @@ services:
     aerospike:
       build: ./aerospike
       volumes_from:
-        - workspace
+        - workspace-cherokeerental
       volumes:
         - ${DATA_SAVE_PATH}/aerospike:/opt/aerospike/data
       ports:
@@ -412,7 +412,7 @@ services:
     caddy:
       build: ./caddy
       volumes_from:
-        - applications
+        - applications-cherokeerental
       volumes:
         - ${CADDY_CUSTOM_CADDYFILE}:/etc/Caddyfile
         - ${CADDY_HOST_LOG_PATH}:/var/log/caddy
@@ -559,7 +559,7 @@ services:
         - BACKEND_PORT=${VARNISH_BACKEND_PORT}
         - VARNISH_SERVER=${VARNISH_PROXY1_SERVER}
       links:
-        - workspace
+        - workspace-cherokeerental
       networks:
         - frontend
 
@@ -578,7 +578,7 @@ services:
         - BACKEND_PORT=${VARNISH_BACKEND_PORT}
         - VARNISH_SERVER=${VARNISH_PROXY2_SERVER}
       links:
-        - workspace
+        - workspace-cherokeerental
       networks:
         - frontend
 
