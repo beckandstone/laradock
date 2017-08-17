@@ -123,7 +123,7 @@ services:
         - "${NGINX_HOST_HTTP_PORT}:80"
         - "${NGINX_HOST_HTTPS_PORT}:443"
       depends_on:
-        - php-fpm
+        - php-fpm-cherokeerental
       networks:
         - frontend
         - backend
@@ -136,7 +136,7 @@ services:
         - BLACKFIRE_SERVER_ID=${BLACKFIRE_SERVER_ID}
         - BLACKFIRE_SERVER_TOKEN=${BLACKFIRE_SERVER_TOKEN}
       depends_on:
-        - php-fpm
+        - php-fpm-cherokeerental
       networks:
         - backend
 
@@ -363,7 +363,7 @@ services:
       ports:
         - "${MEMCACHED_HOST_PORT}:11211"
       depends_on:
-        - php-fpm
+        - php-fpm-cherokeerental
       networks:
         - backend
 
@@ -375,7 +375,7 @@ services:
         - "${BEANSTALKD_HOST_PORT}:11300"
       privileged: true
       depends_on:
-        - php-fpm
+        - php-fpm-cherokeerental
       networks:
         - backend
 
@@ -392,7 +392,7 @@ services:
         - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
         - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
       depends_on:
-        - php-fpm
+        - php-fpm-cherokeerental
       networks:
         - backend
 
@@ -421,7 +421,7 @@ services:
         - "${CADDY_HOST_HTTP_PORT}:80"
         - "${CADDY_HOST_HTTPS_PORT}:443"
       depends_on:
-        - php-fpm
+        - php-fpm-cherokeerental
       networks:
         - frontend
         - backend
@@ -453,7 +453,7 @@ services:
       ports:
         - "${ADM_PORT}:8080"
       depends_on:
-        - php-fpm
+        - php-fpm-cherokeerental
       networks:
         - frontend
         - backend
@@ -490,7 +490,7 @@ services:
         - "${ELASTICSEARCH_HOST_HTTP_PORT}:9200"
         - "${ELASTICSEARCH_HOST_TRANSPORT_PORT}:9300"
       depends_on:
-        - php-fpm
+        - php-fpm-cherokeerental
       networks:
         - frontend
         - backend
