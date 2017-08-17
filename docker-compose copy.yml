@@ -85,7 +85,7 @@ services:
       expose:
         - "9000"
       depends_on:
-        - workspace
+        - workspace-cherokeerental
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
       environment:
@@ -170,7 +170,7 @@ services:
       expose:
         - "9000"
       depends_on:
-        - workspace
+        - workspace-cherokeerental
       networks:
         - frontend
         - backend
