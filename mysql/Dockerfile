@@ -18,9 +18,9 @@ ADD Cherokee.sql /docker-entrypoint-initdb.d/
 
 RUN /bin/bash -c "/usr/bin/mysqld_safe &" && \
   sleep 5 && \
-  mysql -u root -p root  -e "CREATE DATABASE Cherokee" && \
+  mysql -uroot -proot  -e "CREATE DATABASE Cherokee" && \
   sleep 5 && \
-  mysql -u root -p root Cherokee < /docker-entrypoint-initdb.d/Cherokee.sql
+  mysql -uroot -proot Cherokee < /docker-entrypoint-initdb.d/Cherokee.sql
 
 CMD ["mysqld"]
 
