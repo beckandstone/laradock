@@ -16,12 +16,11 @@ RUN chown -R mysql:root /var/lib/mysql/
 ADD my.cnf /etc/mysql/conf.d/my.cnf
 ADD Cherokee.sql /docker-entrypoint-initdb.d/
 
-RUN /bin/bash -c "/usr/bin/mysqld_safe" && \
+RUN /bin/bash -c "/usr/bin/mysqld_safe &" && \
   sleep 5 && \
-  mysql -uroot -proot  -e "create database Cherokee" && \
+  mysql -u root -p root  -e "CREATE DATABASE Cherokee" && \
   sleep 5 && \
-  mysql -uroot -proot "Cherokee" && \
-  mysql -uroot -proot Cherokee < /docker-entrypoint-initdb.d/Cherokee.sql
+  mysql -u root -p root Cherokee < /docker-entrypoint-initdb.d/Cherokee.sql
 
 CMD ["mysqld"]
 
