@@ -10,7 +10,7 @@ ENV WEB_DOCUMENT_ROOT=/var/www/public/
 
 EXPOSE 80 443
 
-WORKDIR /var/www/
+WORKDIR /var/www/public/
 
 COPY vhost.conf /etc/apache2/sites-enabled/vhost.conf
 
