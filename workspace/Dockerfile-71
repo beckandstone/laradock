@@ -207,6 +207,20 @@ RUN if [ ${INSTALL_DRUSH} = true ]; then \
     drush core-status \
 ;fi
 
+#####################################
+# Drupal Console:
+#####################################
+USER root
+ARG INSTALL_DRUPAL_CONSOLE=false
+ENV INSTALL_DRUPAL_CONSOLE ${INSTALL_DRUPAL_CONSOLE}
+RUN if [ ${INSTALL_DRUPAL_CONSOLE} = true ]; then \
+    apt-get update -yqq && \
+    apt-get -y install mysql-client && \
+    curl https://drupalconsole.com/installer -L -o drupal.phar && \
+    mv drupal.phar /usr/local/bin/drupal && \
+    chmod +x /usr/local/bin/drupal \
+;fi
+
 USER laradock
 
 #####################################
@@ -336,14 +350,6 @@ USER laradock
 
 RUN echo "" >> ~/.bashrc && \
     echo 'export PATH="/var/www/vendor/bin:$PATH"' >> ~/.bashrc
-
-#####################################
-# Laravel Artisan Alias
-#####################################
-USER root
-
-RUN echo "" >> ~/.bashrc && \
-    echo 'alias art="php artisan"' >> ~/.bashrc
 
 #####################################
 # Laravel Envoy:
@@ -514,6 +520,21 @@ RUN if [ ${INSTALL_MC} = true ]; then\
 ;fi
 
 #####################################
+# Image optimizers:
+#####################################
+USER root
+ARG INSTALL_IMAGE_OPTIMIZERS=false
+ENV INSTALL_IMAGE_OPTIMIZERS ${INSTALL_IMAGE_OPTIMIZERS}
+RUN if [ ${INSTALL_IMAGE_OPTIMIZERS} = true ]; then \
+    apt-get install -y --force-yes jpegoptim optipng pngquant gifsicle && \
+    if [ ${INSTALL_NODE} = true ]; then \
+        . ~/.bashrc && npm install -g svgo \
+    ;fi\
+;fi
+
+USER laradock
+
+#####################################
 # Symfony:
 #####################################
 USER root
@@ -536,19 +557,18 @@ RUN if [ ${INSTALL_SYMFONY} = true ]; then \
 ;fi
 
 #####################################
-# Image optimizers:
+# PYTHON:
 #####################################
-USER root
-ARG INSTALL_IMAGE_OPTIMIZERS=false
-ENV INSTALL_IMAGE_OPTIMIZERS ${INSTALL_IMAGE_OPTIMIZERS}
-RUN if [ ${INSTALL_IMAGE_OPTIMIZERS} = true ]; then \
-    apt-get install -y --force-yes jpegoptim optipng pngquant gifsicle && \
-    if [ ${INSTALL_NODE} = true ]; then \
-        . ~/.bashrc && npm install -g svgo \
-    ;fi\
+
+ARG INSTALL_PYTHON=false
+ENV INSTALL_PYTHON ${INSTALL_PYTHON}
+RUN if [ ${INSTALL_PYTHON} = true ]; then \
+  apt-get update \
+  && apt-get -y install python python-pip python-dev build-essential  \
+  && pip install --upgrade pip  \
+  && pip install --upgrade virtualenv \
 ;fi
 
-USER laradock
 
 #
 #--------------------------------------------------------------------------
